@@ -6,14 +6,13 @@ import (
 	"time"
 
 	"github.com/hyperledger/fabric-chaincode-go/shim"
-	"github.com/hyperledger/fabric-contract-api-go/v2/contractapi"
+	"github.com/hyperledger/fabric-contract-api-go/contractapi"
 )
 
 // SmartContract provides functions for managing an Asset
 type SmartContract struct {
 	contractapi.Contract
 }
-
 
 type Asset struct {
 	AssetType string `json:"AssetType"`
@@ -88,10 +87,11 @@ func (s *SmartContract) UpdateAsset(ctx contractapi.TransactionContextInterface,
 
 	// overwriting original asset with new asset
 	asset := Asset{
-		ID:    id,
-		Color: color,
-		Size:  size,
-		Owner: owner,
+		AssetType: "asset",
+		ID:        id,
+		Color:     color,
+		Size:      size,
+		Owner:     owner,
 	}
 	assetJSON, err := json.Marshal(asset)
 	if err != nil {
@@ -133,7 +133,6 @@ func (c *SmartContract) GetAllAssets(ctx contractapi.TransactionContextInterface
 		return nil, fmt.Errorf("could not fetch the query result. %s", err)
 	}
 	defer resultsIterator.Close()
-	
 	return assetResultIteratorFunction(resultsIterator)
 }
 
